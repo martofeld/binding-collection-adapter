@@ -10,9 +10,11 @@ import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
  *
  * @see OnItemBindClass.map
  */
-inline fun <reified T> OnItemBindClass<in T>.map(variableId: Int, @LayoutRes layoutRes: Int) {
+inline fun <reified T> OnItemBindClass<in T>.map(
+    variableId: Int,
+    @LayoutRes layoutRes: Int
+): OnItemBindClass<in T> =
     map(T::class.java, variableId, layoutRes)
-}
 
 /**
  * Maps the given type to the given callback.
@@ -20,17 +22,6 @@ inline fun <reified T> OnItemBindClass<in T>.map(variableId: Int, @LayoutRes lay
  * @see OnItemBindClass.map
  */
 inline fun <reified T> OnItemBindClass<in T>.map(
-    noinline onItemBind: (
-        @ParameterName("itemBinding") ItemBinding<in T>,
-        @ParameterName("position") Int,
-        @ParameterName("item") T
-    ) -> Unit
-) {
-    map(T::class.java) { itemBinding, position, item ->
-        onItemBind(
-            itemBinding as ItemBinding<in T>,
-            position,
-            item
-        )
-    }
-}
+    onItemBind: OnItemBind<T>
+): OnItemBindClass<in T> =
+    map(T::class.java, onItemBind)
